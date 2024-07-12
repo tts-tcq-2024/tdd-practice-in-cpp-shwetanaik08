@@ -1,5 +1,10 @@
 // StringCalculator.cpp
 #include "StringCalculator.h"
+#include <vector>          // For std::vector
+#include <string>          // For std::string
+#include <stdexcept>      // For std::runtime_error
+#include <algorithm>      // For std::accumulate
+#include <numeric>        // For std::accumulate
 
 // Split function definition
 std::vector<std::string> StringCalculator::split(const std::string& str, const std::string& delimiter) {
