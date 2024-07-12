@@ -12,6 +12,7 @@ private:
     std::vector<std::string> split(const std::string& str, const std::string& delimiter);
     int toInt(const std::string& str);
     std::vector<int> processNumbers(const std::vector<std::string>& tokens);
+    void validateAndAdd(const std::string& token, std::vector<int>& values);
 };
 
 #endif // STRING_CALCULATOR_H
