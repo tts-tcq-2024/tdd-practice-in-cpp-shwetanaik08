@@ -1,12 +1,11 @@
-// StringCalculator.cpp
 #include "StringCalculator.h"
-#include <vector>          // For std::vector
-#include <string>          // For std::string
-#include <stdexcept>      // For std::runtime_error
-#include <algorithm>      // For std::accumulate
-#include <numeric>        // For std::accumulate
+#include <sstream>
+#include <stdexcept>
+#include <vector>
+#include <algorithm>
+#include <numeric>
 
-// Split function definition
+// Helper function to split a string by a delimiter
 std::vector<std::string> StringCalculator::split(const std::string& str, const std::string& delimiter) {
     std::vector<std::string> tokens;
     size_t prev = 0, pos = 0;
@@ -20,16 +19,38 @@ std::vector<std::string> StringCalculator::split(const std::string& str, const s
     return tokens;
 }
 
-// toInt function definition
+// Helper function to convert a string to an integer
 int StringCalculator::toInt(const std::string& str) {
     return std::stoi(str);
 }
 
-// Add function definition
-int StringCalculator::add(const std::string& numbers) {
-    if (numbers.empty()) {
-        return 0;
+// Validate and process numbers
+std::vector<int> StringCalculator::processNumbers(const std::vector<std::string>& tokens) {
+    std::vector<int> values;
+    std::vector<int> negatives;
+
+    for (const auto& token : tokens) {
+        int value = toInt(token);
+        if (value < 0) {
+            negatives.push_back(value);
+        } else if (value <= 1000) {
+            values.push_back(value);
+        }
     }
+
+    if (!negatives.empty()) {
+        std::string errorMsg = "Negatives not allowed: ";
+        for (const auto& neg : negatives) {
+            errorMsg += std::to_string(neg) + " ";
+        }
+        throw std::runtime_error(errorMsg);
+    }
+
+    return values;
+}
+
+int StringCalculator::add(const std::string& numbers) {
+    if (numbers.empty()) return 0;
 
     std::string delimiter = ",";
     std::string numbersWithoutDelimiter = numbers;
@@ -40,20 +61,11 @@ int StringCalculator::add(const std::string& numbers) {
         numbersWithoutDelimiter = numbers.substr(delimiterPos + 1);
     }
 
+    // Replace newline characters with delimiter
     std::replace(numbersWithoutDelimiter.begin(), numbersWithoutDelimiter.end(), '\n', delimiter[0]);
 
     std::vector<std::string> tokens = split(numbersWithoutDelimiter, delimiter);
-    std::vector<int> values;
-    for (const auto& token : tokens) {
-        int value = toInt(token);
-        if (value < 0) {
-            throw std::runtime_error("Negative numbers are not allowed");
-        }
-        if (value <= 1000) {
-            values.push_back(value);
-        }
-    }
+    std::vector<int> values = processNumbers(tokens);
 
     return std::accumulate(values.begin(), values.end(), 0);
 }
-
