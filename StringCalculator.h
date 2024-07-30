@@ -9,11 +9,14 @@ public:
     int add(const std::string& numbers);
 
 private:
-    std::vector<std::string> split(const std::string& str, const std::string& delimiter);
-    int toInt(const std::string& str);
-    std::string getDelimiter(const std::string& numbers, std::string& numbersWithoutDelimiter);
-    void replaceNewlinesWithDelimiter(std::string& numbersWithoutDelimiter, const std::string& delimiter);
-    std::vector<int> processNumbers(const std::vector<std::string>& tokens);
+    int calculateSum(const std::string& numbers, const std::string& delimiters);
+    std::vector<int> splitAndParseNumbers(const std::string& numbers, const std::string& delimiters);
+    std::vector<int> filterNegativeNumbers(const std::vector<int>& nums);
+    int parseNumber(const std::string& numStr);
+    void throwNegativeNumbersException(const std::vector<int>& negatives);
+    std::string regex_escape(const std::string& str);
+    std::string extractDelimiters(const std::string& delimiterSection);
+    std::string getDelimitersAndNumbers(const std::string& numbers, std::string& delimiters);
 };
 
 #endif // STRINGCALCULATOR_H
